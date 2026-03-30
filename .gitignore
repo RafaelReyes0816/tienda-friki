@@ -1,0 +1,36 @@
+# Contexto local del agente (no versionar)
+Agent/
+
+# Configuración con cadena de conexión (cada quien su copia; no subir a GitHub)
+appsettings.json
+
+# Build / IDE
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.rsuser
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos grandes o binarios habituales
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.tmp
+*.temp
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
+# Paquetes NuGet locales (por si se copian fuera de obj)
+*.nupkg

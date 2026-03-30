@@ -1,0 +1,6 @@
+@tienda_friki_HostAddress = http://localhost:5034
+
+GET {{tienda_friki_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
