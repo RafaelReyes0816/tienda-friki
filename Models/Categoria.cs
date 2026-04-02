@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace tienda_friki.Models;
 
@@ -10,5 +11,6 @@ public class Categoria
     [Required, StringLength(120)]
     public string Nombre { get; set; } = string.Empty;
 
+    [JsonIgnore]
     public ICollection<Producto> Productos { get; set; } = new List<Producto>();
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace tienda_friki.Models;
 
@@ -31,7 +32,9 @@ public class Producto
 
     public Categoria? Categoria { get; set; }
 
+    [JsonIgnore]
     public ICollection<ItemCarrito> ItemsCarrito { get; set; } = new List<ItemCarrito>();
 
+    [JsonIgnore]
     public ICollection<DetallePedido> DetallesPedido { get; set; } = new List<DetallePedido>();
 }

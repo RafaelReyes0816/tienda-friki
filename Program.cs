@@ -26,7 +26,12 @@ builder.Services.AddScoped<ItemCarritoService>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<DetallePedidoService>();
 
-builder.Services.AddControllers();
+// Configuración de controladores y solución para ciclos infinitos en JSON (ReferenceHandler.IgnoreCycles)
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
