@@ -1,4 +1,5 @@
 using tienda_friki.Models;
+using tienda_friki.Models.DTOs;
 using tienda_friki.Repositories;
 
 namespace tienda_friki.Services;
@@ -12,12 +13,22 @@ public class PedidoService
         _repo = repo; _usrRepo = usrRepo;
     }
 
-    public async Task<IEnumerable<Pedido>> GetAll() => await _repo.GetAll();
+    public async Task<IEnumerable<Pedido>> GetAllAsync() => await _repo.GetAll();
 
-    public async Task Create(Pedido pedido)
+    public async Task<Pedido> CreateAsync(PedidoCreateDTO dto)
     {
-        var usr = await _usrRepo.GetById(pedido.UsuarioId);
-        if (usr == null) throw new KeyNotFoundException($"Usuario {pedido.UsuarioId} no existe");
+        var usr = await _usrRepo.GetById(dto.UsuarioId);
+        if (usr == null) throw new Exception($"Usuario {dto.UsuarioId} no existe");
+
+        var pedido = new Pedido
+        {
+            Codigo = dto.Codigo,
+            Fecha = dto.Fecha,
+            Estado = dto.Estado,
+            Total = dto.Total,
+            UsuarioId = dto.UsuarioId
+        };
         await _repo.Add(pedido);
+        return pedido;
     }
 }

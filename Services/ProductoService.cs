@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using tienda_friki.Models;
 using tienda_friki.Models.DTOs;
 using tienda_friki.Repositories;
@@ -9,28 +8,25 @@ public class ProductoService
 {
     private readonly ProductoRepository _repo;
     private readonly CategoriaRepository _catRepo;
-
     public ProductoService(ProductoRepository repo, CategoriaRepository catRepo)
     {
-        _repo = repo;
-        _catRepo = catRepo;
+        _repo = repo; _catRepo = catRepo;
     }
 
-    public async Task<IEnumerable<Producto>> GetAll() => await _repo.GetAll();
+    public async Task<IEnumerable<Producto>> GetAllAsync() => await _repo.GetAll();
 
-    public async Task Create(Producto producto)
+    public async Task<Producto> CreateAsync(ProductoCreateDTO dto)
     {
-        var dto = new ProductoCreateDTO
+        var cat = await _catRepo.GetById(dto.CategoriaId);
+        if (cat == null) throw new Exception($"Categoría {dto.CategoriaId} no existe");
+
+        var producto = new Producto
         {
-            Nombre = producto.Nombre, Precio = producto.Precio,
-            Franquicia = producto.Franquicia, Stock = producto.Stock,
-            CategoriaId = producto.CategoriaId
+            Nombre = dto.Nombre, Imagen = dto.Imagen, Precio = dto.Precio,
+            Franquicia = dto.Franquicia, Oferta = dto.Oferta, Destacado = dto.Destacado,
+            Stock = dto.Stock, CategoriaId = dto.CategoriaId
         };
-        Validator.ValidateObject(dto, new ValidationContext(dto), validateAllProperties: true);
-
-        var cat = await _catRepo.GetById(producto.CategoriaId);
-        if (cat == null) throw new KeyNotFoundException($"Categoría {producto.CategoriaId} no existe");
-
         await _repo.Add(producto);
+        return producto;
     }
 }

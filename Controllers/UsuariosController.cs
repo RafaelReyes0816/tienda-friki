@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
+using tienda_friki.Models.DTOs;
 using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
-[Route("api/usuarios")]
+[Route("api/[controller]")]
 [ApiController]
 public class UsuariosController : ControllerBase
 {
@@ -12,12 +13,13 @@ public class UsuariosController : ControllerBase
     public UsuariosController(UsuarioService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAllAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Post(Usuario usuario)
+    public async Task<IActionResult> Post([FromBody] UsuarioCreateDTO dto)
     {
-        await _service.Create(usuario);
-        return Ok(usuario);
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var result = await _service.CreateAsync(dto);
+        return Ok(result);
     }
 }

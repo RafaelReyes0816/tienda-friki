@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
+using tienda_friki.Models.DTOs;
 using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
-[Route("api/pedidos")]
+[Route("api/[controller]")]
 [ApiController]
 public class PedidosController : ControllerBase
 {
@@ -12,12 +13,17 @@ public class PedidosController : ControllerBase
     public PedidosController(PedidoService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAllAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Post(Pedido pedido)
+    public async Task<IActionResult> Post([FromBody] PedidoCreateDTO dto)
     {
-        try { await _service.Create(pedido); return Ok(pedido); }
-        catch (KeyNotFoundException ex) { return BadRequest(new { message = ex.Message }); }
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        try
+        {
+            var result = await _service.CreateAsync(dto);
+            return Ok(result);
+        }
+        catch (Exception ex) { return BadRequest(new { message = ex.Message }); }
     }
 }

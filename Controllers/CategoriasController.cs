@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
+using tienda_friki.Models.DTOs;
 using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
-[Route("api/categorias")]
+[Route("api/[controller]")]
 [ApiController]
 public class CategoriasController : ControllerBase
 {
@@ -12,12 +13,13 @@ public class CategoriasController : ControllerBase
     public CategoriasController(CategoriaService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAllAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Post(Categoria categoria)
+    public async Task<IActionResult> Post([FromBody] CategoriaCreateDTO dto)
     {
-        await _service.Create(categoria);
-        return Ok(categoria);
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var result = await _service.CreateAsync(dto);
+        return Ok(result);
     }
 }

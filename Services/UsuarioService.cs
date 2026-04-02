@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using tienda_friki.Models;
 using tienda_friki.Models.DTOs;
 using tienda_friki.Repositories;
@@ -10,16 +9,21 @@ public class UsuarioService
     private readonly UsuarioRepository _repo;
     public UsuarioService(UsuarioRepository repo) => _repo = repo;
 
-    public async Task<IEnumerable<Usuario>> GetAll() => await _repo.GetAll();
+    public async Task<IEnumerable<Usuario>> GetAllAsync() => await _repo.GetAll();
 
-    public async Task Create(Usuario usuario)
+    public async Task<Usuario> CreateAsync(UsuarioCreateDTO dto)
     {
-        var dto = new UsuarioCreateDTO
+        var usuario = new Usuario
         {
-            Nombre = usuario.Nombre, Email = usuario.Email, Telefono = usuario.Telefono,
-            Contrasena = usuario.Contrasena, Rol = usuario.Rol
+            Nombre = dto.Nombre,
+            Email = dto.Email,
+            Telefono = dto.Telefono,
+            Contrasena = dto.Contrasena,
+            Rol = dto.Rol,
+            FechaRegistro = DateTime.UtcNow 
         };
-        Validator.ValidateObject(dto, new ValidationContext(dto), validateAllProperties: true);
+        
         await _repo.Add(usuario);
+        return usuario;
     }
 }
