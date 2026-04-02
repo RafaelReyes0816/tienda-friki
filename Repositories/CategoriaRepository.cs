@@ -4,23 +4,17 @@ using tienda_friki.Models;
 
 namespace tienda_friki.Repositories;
 
-public interface ICategoriaRepository
-{
-    Task<IEnumerable<Categoria>> GetAll();
-    Task Add(Categoria categoria);
-}
-
-public class CategoriaRepository : ICategoriaRepository
+public class CategoriaRepository
 {
     private readonly DBContext _context;
 
-    public CategoriaRepository(DBContext context)
-    {
-        _context = context;
-    }
+    public CategoriaRepository(DBContext context) => _context = context;
 
     public async Task<IEnumerable<Categoria>> GetAll()
         => await _context.Categorias.ToListAsync();
+
+    public async Task<Categoria?> GetById(int id)
+        => await _context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task Add(Categoria categoria)
     {

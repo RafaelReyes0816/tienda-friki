@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
-using tienda_friki.Repositories;
+using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
@@ -8,21 +9,32 @@ namespace tienda_friki.Controllers;
 [ApiController]
 public class ProductosController : ControllerBase
 {
-    private readonly IProductoRepository _repo;
+    private readonly ProductoService _service;
 
-    public ProductosController(IProductoRepository repo)
-    {
-        _repo = repo;
-    }
+    public ProductosController(ProductoService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _repo.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
 
     [HttpPost]
     public async Task<IActionResult> Post(Producto producto)
     {
-        await _repo.Add(producto);
-        return Ok(producto);
+        try
+        {
+            await _service.Create(producto);
+            return Ok(producto);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error interno del servidor." });
+        }
     }
 }

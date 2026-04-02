@@ -4,23 +4,17 @@ using tienda_friki.Models;
 
 namespace tienda_friki.Repositories;
 
-public interface IUsuarioRepository
-{
-    Task<IEnumerable<Usuario>> GetAll();
-    Task Add(Usuario usuario);
-}
-
-public class UsuarioRepository : IUsuarioRepository
+public class UsuarioRepository
 {
     private readonly DBContext _context;
 
-    public UsuarioRepository(DBContext context)
-    {
-        _context = context;
-    }
+    public UsuarioRepository(DBContext context) => _context = context;
 
     public async Task<IEnumerable<Usuario>> GetAll()
         => await _context.Usuarios.ToListAsync();
+
+    public async Task<Usuario?> GetById(int id)
+        => await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
 
     public async Task Add(Usuario usuario)
     {

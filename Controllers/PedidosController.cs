@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
-using tienda_friki.Repositories;
+using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
@@ -8,21 +8,16 @@ namespace tienda_friki.Controllers;
 [ApiController]
 public class PedidosController : ControllerBase
 {
-    private readonly IPedidoRepository _repo;
-
-    public PedidosController(IPedidoRepository repo)
-    {
-        _repo = repo;
-    }
+    private readonly PedidoService _service;
+    public PedidosController(PedidoService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _repo.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
 
     [HttpPost]
     public async Task<IActionResult> Post(Pedido pedido)
     {
-        await _repo.Add(pedido);
-        return Ok(pedido);
+        try { await _service.Create(pedido); return Ok(pedido); }
+        catch (KeyNotFoundException ex) { return BadRequest(new { message = ex.Message }); }
     }
 }

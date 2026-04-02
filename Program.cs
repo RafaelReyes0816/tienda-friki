@@ -1,22 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using tienda_friki.Data;
 using tienda_friki.Repositories;
+using tienda_friki.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// EF: una instancia de DBContext por petición HTTP (Scoped); usa la cadena de appsettings.
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// DI: al pedir I...Repository en un controlador, se inyecta la clase concreta.
-// Scoped = misma instancia durante toda la petición.
-builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IItemCarritoRepository, ItemCarritoRepository>();
-builder.Services.AddScoped<IDetallePedidoRepository, DetallePedidoRepository>();
+// Repositorios
+builder.Services.AddScoped<CategoriaRepository>();
+builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<ProductoRepository>();
+builder.Services.AddScoped<CarritoRepository>();
+builder.Services.AddScoped<ItemCarritoRepository>();
+builder.Services.AddScoped<PedidoRepository>();
+builder.Services.AddScoped<DetallePedidoRepository>();
+
+// Servicios
+builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ProductoService>();
+builder.Services.AddScoped<CarritoService>();
+builder.Services.AddScoped<ItemCarritoService>();
+builder.Services.AddScoped<PedidoService>();
+builder.Services.AddScoped<DetallePedidoService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -31,6 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers(); // rutas de Controllers
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

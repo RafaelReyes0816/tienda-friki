@@ -4,23 +4,17 @@ using tienda_friki.Models;
 
 namespace tienda_friki.Repositories;
 
-public interface ICarritoRepository
-{
-    Task<IEnumerable<Carrito>> GetAll();
-    Task Add(Carrito carrito);
-}
-
-public class CarritoRepository : ICarritoRepository
+public class CarritoRepository
 {
     private readonly DBContext _context;
 
-    public CarritoRepository(DBContext context)
-    {
-        _context = context;
-    }
+    public CarritoRepository(DBContext context) => _context = context;
 
     public async Task<IEnumerable<Carrito>> GetAll()
-        => await _context.Carritos.ToListAsync();
+        => await _context.Carritos.Include(c => c.Usuario).ToListAsync();
+
+    public async Task<Carrito?> GetById(int id)
+        => await _context.Carritos.Include(c => c.Usuario).FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task Add(Carrito carrito)
     {

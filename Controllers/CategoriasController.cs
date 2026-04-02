@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using tienda_friki.Models;
-using tienda_friki.Repositories;
+using tienda_friki.Services;
 
 namespace tienda_friki.Controllers;
 
@@ -8,21 +8,16 @@ namespace tienda_friki.Controllers;
 [ApiController]
 public class CategoriasController : ControllerBase
 {
-    private readonly ICategoriaRepository _repo;
-
-    public CategoriasController(ICategoriaRepository repo)
-    {
-        _repo = repo;
-    }
+    private readonly CategoriaService _service;
+    public CategoriasController(CategoriaService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _repo.GetAll());
+    public async Task<IActionResult> Get() => Ok(await _service.GetAll());
 
     [HttpPost]
     public async Task<IActionResult> Post(Categoria categoria)
     {
-        await _repo.Add(categoria);
+        await _service.Create(categoria);
         return Ok(categoria);
     }
 }

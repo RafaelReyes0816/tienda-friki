@@ -4,23 +4,22 @@ using tienda_friki.Models;
 
 namespace tienda_friki.Repositories;
 
-public interface IDetallePedidoRepository
-{
-    Task<IEnumerable<DetallePedido>> GetAll();
-    Task Add(DetallePedido detalle);
-}
-
-public class DetallePedidoRepository : IDetallePedidoRepository
+public class DetallePedidoRepository
 {
     private readonly DBContext _context;
 
-    public DetallePedidoRepository(DBContext context)
-    {
-        _context = context;
-    }
+    public DetallePedidoRepository(DBContext context) => _context = context;
 
     public async Task<IEnumerable<DetallePedido>> GetAll()
-        => await _context.DetallesPedido.ToListAsync();
+        => await _context.DetallesPedido
+            .Include(d => d.Producto)
+            .Include(d => d.Pedido)
+            .ToListAsync();
+
+    public async Task<DetallePedido?> GetById(int id)
+        => await _context.DetallesPedido
+            .Include(d => d.Producto)
+            .FirstOrDefaultAsync(d => d.Id == id);
 
     public async Task Add(DetallePedido detalle)
     {
