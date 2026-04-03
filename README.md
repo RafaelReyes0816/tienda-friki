@@ -228,6 +228,28 @@ dotnet ef database update
 dotnet ef migrations remove
 ```
 
+## Solución de Problemas Comunes (Troubleshooting)
+
+### Error `System.InvalidOperationException: Jwt:Key not configured`
+Este error ocurre porque la configuración de JWT no está presente en el archivo `appsettings.json`.
+**Solución:** Asegúrate de tener la sección `Jwt` en tu archivo de configuración:
+```json
+"Jwt": {
+    "Key": "tu_clave_secreta_muy_larga_y_segura_aqui",
+    "Issuer": "tu_api_issuer",
+    "Audience": "tu_api_audience"
+}
+```
+
+### Error `Npgsql.NpgsqlException: Failed to connect to 127.0.0.1:5432`
+Este error indica que la aplicación no puede conectar con la base de datos PostgreSQL, usualmente por un puerto incorrecto o credenciales inválidas.
+**Solución:**
+1. Verifica en qué puerto está escuchando tu PostgreSQL (comúnmente `5432` o `5433`).
+2. Ajusta la `ConnectionString` en `appsettings.json` con tus datos locales:
+```json
+"DefaultConnection": "Host=localhost;Port=5433;Database=Tienda-Friki;Username=postgres;Password=tu_password"
+```
+
 ## Notas importantes
 
 - `appsettings.json` no se versiona para proteger credenciales y configuraciones locales.
