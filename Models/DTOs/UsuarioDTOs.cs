@@ -19,3 +19,12 @@ public class UsuarioCreateDTO
     [Required, StringLength(30)]
     public string Rol { get; set; } = "Cliente";
 }
+
+public class UsuarioLoginDTO
+{
+    [Required, EmailAddress]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    public string Contrasena { get; set; } = string.Empty;
+}

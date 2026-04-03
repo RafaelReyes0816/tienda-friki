@@ -26,4 +26,14 @@ public class UsuarioService
         await _repo.Add(usuario);
         return usuario;
     }
+
+    public async Task<Usuario?> LoginAsync(string email, string contrasena)
+    {
+        var usuario = await _repo.GetByEmail(email);
+        if (usuario != null && usuario.Contrasena == contrasena) // Nota: En producción, hashea la contraseña
+        {
+            return usuario;
+        }
+        return null;
+    }
 }
