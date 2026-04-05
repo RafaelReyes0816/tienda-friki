@@ -37,3 +37,9 @@ public class UsuarioUpdateDTO
     [StringLength(30)]
     public string? Rol { get; set; }
 }
+
+public class RefreshTokenRequestDTO
+{
+    [Required]
+    public string RefreshToken { get; set; } = string.Empty;
+}

@@ -14,6 +14,7 @@ builder.Services.AddDbContext<DBContext>(options =>
 // Repositorios
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<RefreshTokenRepository>();
 builder.Services.AddScoped<ProductoRepository>();
 builder.Services.AddScoped<CarritoRepository>();
 builder.Services.AddScoped<ItemCarritoRepository>();
@@ -23,6 +24,7 @@ builder.Services.AddScoped<DetallePedidoRepository>();
 // Servicios
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<ProductoService>();
 builder.Services.AddScoped<CarritoService>();
 builder.Services.AddScoped<ItemCarritoService>();
@@ -56,7 +58,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.Zero
         };
     });
 

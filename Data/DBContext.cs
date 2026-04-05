@@ -10,6 +10,7 @@ public class DBContext : DbContext
     }
 
     public DbSet<Usuario> Usuarios { get; set; } = null!;
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     public DbSet<Categoria> Categorias { get; set; } = null!;
     public DbSet<Producto> Productos { get; set; } = null!;
     public DbSet<Carrito> Carritos { get; set; } = null!;
@@ -24,6 +25,15 @@ public class DBContext : DbContext
         modelBuilder.Entity<Usuario>()
             .HasIndex(u => u.Email)
             .IsUnique();
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(r => r.Usuario)
+            .WithMany()
+            .HasForeignKey(r => r.UsuarioId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasIndex(r => r.TokenHash);
 
         modelBuilder.Entity<Usuario>()
             .HasOne(u => u.Carrito)
