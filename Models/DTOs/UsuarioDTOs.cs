@@ -28,3 +28,9 @@ public class UsuarioLoginDTO
     [Required]
     public string Contrasena { get; set; } = string.Empty;
 }
+
+public class RefreshTokenRequestDTO
+{
+    [Required]
+    public string RefreshToken { get; set; } = string.Empty;
+}
