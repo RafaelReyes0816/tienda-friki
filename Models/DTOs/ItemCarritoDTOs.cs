@@ -6,3 +6,10 @@ public class ItemCarritoCreateDTO
     public int CarritoId { get; set; }
     public int ProductoId { get; set; }
 }
+
+public class ItemCarritoUpdateDTO
+{
+    public int? Cantidad { get; set; }
+    public int? CarritoId { get; set; }
+    public int? ProductoId { get; set; }
+}

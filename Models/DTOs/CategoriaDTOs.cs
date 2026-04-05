@@ -7,3 +7,9 @@ public class CategoriaCreateDTO
     [Required, StringLength(120)]
     public string Nombre { get; set; } = string.Empty;
 }
+
+public class CategoriaUpdateDTO
+{
+    [StringLength(120)]
+    public string? Nombre { get; set; }
+}
