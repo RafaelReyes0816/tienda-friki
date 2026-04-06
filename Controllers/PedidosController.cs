@@ -12,6 +12,7 @@ public class PedidosController : ControllerBase
     public PedidosController(PedidoService service) => _service = service;
 
     [HttpGet] public async Task<IActionResult> Get() => Ok(await _service.GetAllAsync());
+    [HttpGet("usuario/{id}")] public async Task<IActionResult> GetByUsuario(int id) => Ok(await _service.GetByUsuarioAsync(id));
     [HttpGet("{id}")] public async Task<IActionResult> GetById(int id) => await _service.GetByIdAsync(id) is var r ? r == null ? NotFound() : Ok(r) : NotFound();
     [HttpPost] public async Task<IActionResult> Post([FromBody] PedidoCreateDTO dto)
     {

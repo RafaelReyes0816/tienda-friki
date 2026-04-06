@@ -3,6 +3,7 @@ Agent/
 
 # Configuración con cadena de conexión (cada quien su copia; no subir a GitHub)
 appsettings.json
+appsettings.Development.json
 
 # Build / IDE
 [Bb]in/

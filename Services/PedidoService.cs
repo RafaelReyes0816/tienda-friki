@@ -11,6 +11,7 @@ public class PedidoService
     public PedidoService(PedidoRepository repo, UsuarioRepository usrRepo) { _repo = repo; _usrRepo = usrRepo; }
 
     public async Task<IEnumerable<Pedido>> GetAllAsync() => await _repo.GetAll();
+    public async Task<IEnumerable<Pedido>> GetByUsuarioAsync(int usuarioId) => await _repo.GetByUsuario(usuarioId);
     public async Task<Pedido?> GetByIdAsync(int id) => await _repo.GetById(id);
 
     public async Task<Pedido> CreateAsync(PedidoCreateDTO dto)
